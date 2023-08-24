@@ -1,5 +1,6 @@
 # Upute
 pokreatanje se izvodi preko naredbe "ng serve --proxy-config proxy.conf.json" (bez navodnika) u terminalu. Adresa: http://localhost:4200/
+Prije pokretanja frontenda, bilo bi dobro pokrenuti backend (F5 u VS solution-u).
 
 Prijava:
 1. postoje samo 3 korisnika i nije moguće kreirati nove:
