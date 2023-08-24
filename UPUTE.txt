@@ -1,0 +1,25 @@
+# Upute
+pokreatanje se izvodi preko naredbe "ng serve --proxy-config proxy.conf.json" (bez navodnika) u terminalu. Adresa: http://localhost:4200/
+
+Prijava:
+1. postoje samo 3 korisnika i nije moguće kreirati nove:
+   i. Username: Viewer1, Pass: 123
+   ii. Username: Editor1, Pass: 123
+   iii. Username: Admin1, Pass: 123
+
+   Korisnici us prijavljeni samo u serivice-u, to jest ne ostaju prijavljeni ako se stranica osviježi.
+
+2. Postoji zaštita pristupa pojedinim adresama (preko guard-a), ali je isključena.
+
+3. Home page - ništa specifično.
+
+4. Map -.s lijeve strane je ARC GIS mapa, a s desne popis automobila. Klikom na automobil se pokazuje njegova pozicija na karti (plavom točkom). Unos koordinata vozina se mora raditi preko baze podataka direktnim unosom (u realnosti bi to trebao biti poziv na kakav GPS API automobila, nema smisla da se koordinate unose ručno). Ako se auto ne prikazuje na mapi, vjerojatno ima koordinate 0, 0. (Zagreb je 15.966568, 45.815399).
+
+5. Cars - CRUD operacije nad vozilima. Napomene:
+	i. Registracija je obavazna i mora biti unique.
+	ii. Model je obavezan
+	iii. godina prizvodnje mora biti u intervalu 1885 do trenutne
+
+6. Drivers - CRUD operacije nad vozačima - nije implementirano, radi samo pogled
+
+7. Postavljanje vozila vozačima - nije implementirano
