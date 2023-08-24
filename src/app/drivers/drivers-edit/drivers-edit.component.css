@@ -1,0 +1,10 @@
+.custom-inline-flex {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+    gap: 1vw;
+  }
+
+.custom-inline-flex > *:first-child {
+    margin-right: auto;
+}

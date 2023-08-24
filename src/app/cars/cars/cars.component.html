@@ -1,0 +1,38 @@
+<div class="container">
+    <h1 class="mt-3">Car List</h1>
+    <div class="d-flex justify-content-end mt-3">
+        <a [routerLink]="['/cars/add']" class="btn btn-primary">Add Car</a>
+    </div>
+</div>
+
+<ul class="list-group">
+    <ng-container *ngFor="let car of cars; let i = index">
+        <li class="list-group-item" aria-current="true">
+            <div class="d-flex justify-content gap-5">
+                <div>
+                    <label>Id: </label>
+                    <div>{{car.id}}</div>
+                </div>
+                <div>
+                    <label>Model: </label>
+                    <div>{{car.model}}</div>
+                </div>
+                <div>
+                    <label>Registration: </label>
+                    <div>{{car.registration}}</div>
+                </div>
+                <div>
+                    <label>Production year: </label>
+                    <div>{{car.productionYear}}</div>
+                </div>
+                <div>
+                    <label>Load capacity (kg): </label>
+                    <div>{{car.loadCapacityKg}}</div>
+                </div>
+                <div style="align-self: center; margin-left: auto;">
+                    <button class="btn btn-primary" (click)="openEditing(i)">Edit</button>
+                </div>
+            </div>
+        </li>
+    </ng-container>
+</ul>

@@ -1,0 +1,18 @@
+<div class="list-group">
+    <a *ngFor="let car of cars; let i = index" (click) = "onCarClick(i)"
+    class="list-group-item list-group-item-action custom-list-item unselectable"
+    [class.active]="i === selectedCarIndex">
+        <div class="list-item">
+            <div class="car-model">
+                <label>Model: </label>
+                <div>{{car.model}}</div>
+            </div>
+            <div class="car-driver">
+                <label>Driver: </label>
+                <div>{{car.driver?.name}}</div>
+            </div>
+            <span class="hover-effect"></span>
+        </div>
+    </a>
+</div>
+  

@@ -1,0 +1,47 @@
+.unselectable {
+    user-select: none;
+}
+
+.list-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+}
+
+.custom-list-item {
+    background-color: whitesmoke;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-list-item.active {
+    background-color: lightblue; 
+    color: black;
+    border-color: lightblue;
+}
+
+.custom-list-item .hover-effect {
+    content: ''; /* Required for the pseudo-element */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: yellow;
+    opacity: 0; /* Initially transparent */
+    transition: opacity 0.3s; /* Add smooth transition */
+    pointer-events: none; /* Allows clicks to pass through */
+    mix-blend-mode: overlay;
+  }
+  .custom-list-item:hover .hover-effect {
+    opacity: 0.5; /* Show the hover effect */
+  }
+
+.car-model,
+.car-driver {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+}

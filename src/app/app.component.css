@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+}
+
+app-nav-bar {
+    flex: 0 0 auto;
+}
+
+#body-container {
+    flex: 1 1 auto;
+    overflow: auto;
+}

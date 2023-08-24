@@ -1,0 +1,17 @@
+<div class="container">
+    <h1 class="mt-3">Add Car</h1>
+
+    <form>
+        <div class="mt-2">
+            <div class="mt-3">
+                <label class="form-label">Name</label>
+                <input type="text" id="driverName" class="form-control" name="driverName" [(ngModel)]="driver!.name">
+            </div>
+        </div>
+            <div class="custom-inline-flex mt-5">
+            <button class="btn btn-secondary" (click)="returnToDrivers()">Back</button>
+            <button class="btn btn-primary" (click)="applyEdit()">Save</button>
+            <button class="btn btn-danger" (click)="deleteDriver()">Delete</button>
+        </div>
+    </form>
+</div>

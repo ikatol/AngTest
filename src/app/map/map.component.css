@@ -1,0 +1,16 @@
+#map-display {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.horizontal-flex {
+    flex: 0 0 auto;
+    width: 50%;
+}
+
+app-car-list {
+    max-height: 100%;
+    overflow: auto;
+}
