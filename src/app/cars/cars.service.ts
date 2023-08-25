@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Car, CarDriver, Driver, FullCar } from "./car.model";
-import { Observable, map } from "rxjs";
-import { HttpClient } from "@angular/common/http";
+import { Car, CarCoords, CarDriver, Driver, FullCar } from "./car.model";
+import { Observable, catchError, map, of, throwError } from "rxjs";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 
 @Injectable({
     providedIn: 'root',
@@ -20,7 +20,7 @@ export class CarsService {
 
     constructor(private http: HttpClient) {}
 
-    getCars1(): Observable<Car[]> {
+    getCars(): Observable<Car[]> {
         const url = `API/Car/GetCars`;
         return this.http.get<Car[]>(url).pipe(
             map((response: any) => {
@@ -30,7 +30,39 @@ export class CarsService {
                     console.error('Invalid API response format: ', response);
                     return [];
                 }
-                
+            })
+        );
+    }
+
+    getCarCoords(): Observable<CarCoords[]> {
+        const url = `/API/Car/GetCarsWithCoordinates`;
+        return this.http.get<CarCoords[]>(url).pipe(
+            map((response: any) => {
+                if (response.success && Array.isArray(response.payload)) {
+                    return response.payload.map((carData: any) => new CarCoords(carData.id, carData.model, carData.registration, carData.productionYear, carData.loadCapacityKg, carData.longitude, carData.latitude));
+                } else {
+                    console.error('Invalid API response format: ', response);
+                    return [];
+                }
+            })
+        );
+    }
+
+    getCarByRegistration(registration: string) : Observable<Car | null>{
+        const url = `API/Car/GetCarByRegistration/${registration}`;
+        return this.http.get<Car>(url, { observe: 'response' }).pipe(
+            map((response: any) => {
+                const carData = response.body.payload;
+                return new Car(carData.id, carData.model, carData.registration, carData.productionYear, carData.loadCapacityKg);
+            }),
+            catchError((error: HttpErrorResponse) => {
+                if (error.status === 404) {
+                    return of(null);
+                }
+                console.error('An error occured: ', error.message);
+                return throwError(() => {
+                    new Error('Something went wrong');
+                });
             })
         );
     }
@@ -49,7 +81,7 @@ export class CarsService {
         );
     }
 
-    getCars(): Car[] {
+    /* getCars(): Car[] {
         return this.cars;
     }
     deleteCar(id: number) {
@@ -63,12 +95,12 @@ export class CarsService {
         if (index != -1) {
             this.cars[index] = car;
         }
-    }
+    } */
 
-    addCar(car: Car) {
+    /* addCar(car: Car) {
         car.id = this.k++;
         this.cars.push(car);
-    }
+    } */
 
     /* checkRegistrationAvailability(registration: string) {
         const cars = this.getCars1();

@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CarsService } from '../../cars.service';
-import { Car, FullCar } from '../../car.model';
+import { Car, CarCoords, FullCar } from '../../car.model';
 import { Router } from '@angular/router';
 import { CarAdditionService } from './car-addition.service';
+import { Subject, firstValueFrom, takeUntil } from 'rxjs';
 
 
 @Component({
@@ -10,62 +11,51 @@ import { CarAdditionService } from './car-addition.service';
   templateUrl: './add-car.component.html',
   styleUrls: ['./add-car.component.css']
 })
-export class AddCarComponent {
-  newCar: Car = new Car(0, "", "", 1885, 0);
+export class AddCarComponent implements OnDestroy {
+  newCar: CarCoords = new CarCoords(0, "", "", 1885, 0, 0, 0);
   currentYear: number = new Date().getFullYear();
 
   constructor(private carAdditionService: CarAdditionService, private carsService: CarsService, private router: Router) { }
 
   status: string = '';
 
-  cars: Car[] = [];
+  private ngUnsubscribeCarAdd = new Subject();
+  private ngUnsubscribeCheckRegistraion = new Subject();
 
-  success: boolean = false;
+  ngOnDestroy(): void {
+    this.ngUnsubscribeCarAdd.next(null);
+    this.ngUnsubscribeCarAdd.complete();
 
-  addCar() {
-    this.carsService.getCars1().subscribe({
-      next: (data) => {
-        this.cars = data;
-      },
-      error: (error) => {
-        console.log("Error adding the car", error);
-      },
-      complete: () => {
-        console.log("completed.");
-        this.add();
+    this.ngUnsubscribeCheckRegistraion.next(null);
+    this.ngUnsubscribeCheckRegistraion.complete();
+  }
+  async addCar() {
+    try {
+      const carWithTheSameRegistration = await firstValueFrom(this.carsService.getCarByRegistration(this.newCar.registration.trim()).pipe(takeUntil(this.ngUnsubscribeCheckRegistraion)));
+      const carToBeAdded = new CarCoords(this.newCar.id, this.newCar.model.trim(), this.newCar.registration.trim(), this.newCar.productionYear, this.newCar.loadCapacityKg, this.newCar.longitude, this.newCar.latitude);
+      if (carToBeAdded.registration === '') {
+        this.status = 'Registration is required.';
+      } else if (carWithTheSameRegistration != null && carWithTheSameRegistration.id !== this.newCar.id) {
+        this.status = 'Registration already taken.';
+      } else if (carToBeAdded.model === '') {
+        this.status = 'Car model is required.';
+      } else if (carToBeAdded.productionYear < 1885 || carToBeAdded.productionYear > this.currentYear) {
+        this.status = `Prduction year must be within 1885 and ${this.currentYear}.`;
+      } else {
+        const success = await firstValueFrom(this.carAdditionService.addCar(this.newCar).pipe(takeUntil(this.ngUnsubscribeCarAdd)));
+        if (success) {
+          this.redirectToCars();
+        } else {
+          this.status = "Failed to add car.";
+        }
       }
-    });
-    this.carsService.getCars1();
+    } catch (error) {
+      console.log("Error updating the car", error);
+    }
+    
   }
 
-  private add() {
-    const carToBeAdded = new Car(this.newCar.id, this.newCar.model.trim(), this.newCar.registration.trim(), this.newCar.productionYear, 0);
-    if (carToBeAdded.registration === '') {
-      this.status = 'Registration is required.';
-    } else if (this.cars.some(c => c.registration === carToBeAdded.registration)) {
-      this.status = 'Registration already taken.';
-    } else if (carToBeAdded.model === '') {
-      this.status = 'Car model is required.';
-    } else if (carToBeAdded.productionYear < 1885 || carToBeAdded.productionYear > this.currentYear) {
-      this.status = `Prduction year must be within 1885 and ${this.currentYear}.`;
-    } else {
-      this.carAdditionService.addCar(carToBeAdded).subscribe({
-        next: (data) => {
-          this.success = data;
-        },
-        error: (error) => {
-          console.log("Error adding the car", error);
-        },
-        complete: () => {
-          console.log("Adding completed.");
-          if (this.success) {
-            this.router.navigate(['/cars']);
-          }
-          else {
-            this.status = "Failed to add car.";
-          } 
-        }
-      });
-    }
+  redirectToCars() {
+    this.router.navigate(['/cars']);
   }
 }

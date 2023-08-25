@@ -5,9 +5,9 @@ import { setCurrentUser } from "./auth.service";
 @Injectable()
 export class LogInService {
     mockUsers = [
-        { id: 1, username: 'frankex', password: 'tinytim2', role: 'viewer' },
-        { id: 2, username: 'dragutin22', password: 'drogba17', role: 'editor' },
-        { id: 3, username: 'hamurabi', password: '123123', role: 'admin' }
+        { id: 1, username: 'Viewer1', password: '123', role: 'viewer' },
+        { id: 2, username: 'Editor1', password: '123', role: 'editor' },
+        { id: 3, username: 'Admin1', password: '123', role: 'admin' }
     ];
 
     logIn(userToLogIn: User): boolean {

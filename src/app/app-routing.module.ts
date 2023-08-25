@@ -10,6 +10,7 @@ import { CarsComponent } from './cars/cars/cars.component';
 import { AddCarComponent } from './cars/cars/add-car/add-car.component';
 import { EditCarComponent } from './cars/cars/edit-car/edit-car.component';
 import { DriversEditComponent } from './drivers/drivers-edit/drivers-edit.component';
+import { DriversAddComponent } from './drivers/drivers-add/drivers-add.component';
 
 const routes: Routes = [
   {
@@ -27,10 +28,6 @@ const routes: Routes = [
     component: CarsComponent
   },
   {
-    path: 'drivers',
-    component: DriversViewComponent
-  },
-  {
     path: 'cars/add',
     component: AddCarComponent
   },
@@ -39,8 +36,16 @@ const routes: Routes = [
     component: EditCarComponent
   },
   {
+    path: 'drivers',
+    component: DriversViewComponent
+  },
+  {
     path: 'drivers/edit',
     component: DriversEditComponent
+  },
+  {
+    path: 'drivers/add',
+    component: DriversAddComponent
   },
   {
     path: 'assignments',

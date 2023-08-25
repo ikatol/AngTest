@@ -1,18 +1,18 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Car } from '../../car.model';
 import { Observable, catchError, map, throwError } from 'rxjs';
+import { Driver } from 'src/app/cars/car.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CarAdditionService {
+export class AddDriverService {
 
   constructor(private http: HttpClient) { }
 
-  addCar(car: Car): Observable<boolean> {
-    const url = `API/Car/AddCar`;
-    return this.http.post<Car>(url, car).pipe(
+  addDriver(driver: Driver): Observable<boolean> {
+    const url = `API/Driver/AddDriver`;
+    return this.http.post<Driver>(url, driver).pipe(
         map((response: any) => {
             if (response.success) {
               return true;

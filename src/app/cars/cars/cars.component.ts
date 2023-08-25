@@ -1,9 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Car } from '../car.model';
+import { Car, CarCoords } from '../car.model';
 import { CarsService } from '../cars.service';
 import { Router } from '@angular/router';
 import { CarEditDeleteService } from './car-edit-delete.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, firstValueFrom, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-cars',
@@ -12,9 +12,9 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class CarsComponent implements OnInit, OnDestroy {
 
-  constructor(private carService: CarsService, private router: Router, private carEditDeleteService: CarEditDeleteService) { }
+  constructor(private carsService: CarsService, private router: Router, private carEditDeleteService: CarEditDeleteService) { }
   
-  cars: Car[] = [];
+  cars: CarCoords[] = [];
 
   private ngUnsubscribeCarData = new Subject();
 
@@ -27,7 +27,7 @@ export class CarsComponent implements OnInit, OnDestroy {
     this.router.navigate(["/cars/edit"]);
   }
 
-  fetchCarData() {
+  /* fetchCarData() {
     this.carService.getCars1().pipe(takeUntil(this.ngUnsubscribeCarData))
       .subscribe({
         next: (data) => {
@@ -40,6 +40,14 @@ export class CarsComponent implements OnInit, OnDestroy {
           console.log("Car Data fetching completed.");
         }
       })
+  } */
+
+  async fetchCarData() {
+    try {
+      this.cars = await firstValueFrom(this.carsService.getCarCoords().pipe(takeUntil(this.ngUnsubscribeCarData)));
+    } catch (error) {
+      console.log("Error fetching car data", error);
+    }
   }
 
   refreshData() {
